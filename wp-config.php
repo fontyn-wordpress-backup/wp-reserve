@@ -23,14 +23,15 @@ if ($GLOBALS['ext_db_connection']->connect_error) {
     error_log('External DB connection failed: ' . $GLOBALS['ext_db_connection']->connect_error);
 }
 
-define('AUTH_KEY', getenv('AUTH_KEY') ?: 'generate-in-build');
-define('SECURE_AUTH_KEY', getenv('SECURE_AUTH_KEY') ?: 'generate-in-build');
-define('LOGGED_IN_KEY', getenv('LOGGED_IN_KEY') ?: 'generate-in-build');
-define('NONCE_KEY', getenv('NONCE_KEY') ?: 'generate-in-build');
-define('AUTH_SALT', getenv('AUTH_SALT') ?: 'generate-in-build');
-define('SECURE_AUTH_SALT', getenv('SECURE_AUTH_SALT') ?: 'generate-in-build');
-define('LOGGED_IN_SALT', getenv('LOGGED_IN_SALT') ?: 'generate-in-build');
-define('NONCE_SALT', getenv('NONCE_SALT') ?: 'generate-in-build');
+$salt_lines = getenv('WP_SALTS');
+if ($salt_lines) {
+    // Evaluate the lines so that define() statements run
+    eval($salt_lines);
+} else {
+    // Fallback - no salts defined (not recommended)
+    define('AUTH_KEY', 'put fallback here');
+    // ... define the rest similarly ...
+}
 
 define('WP_CACHE', true);
 define('WP_POST_REVISIONS', 5);
