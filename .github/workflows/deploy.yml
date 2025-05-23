@@ -96,14 +96,14 @@ jobs:
           --azure-file-volume-account-key ${{ secrets.AZURE_STORAGE_KEY }} \
           --azure-file-volume-share-name ${{ env.FILE_SHARE_NAME }} \
           --azure-file-volume-mount-path /var/www/html/wp-content \
-            --environment-variables WORDPRESS_DB_HOST=${{ secrets.WORDPRESS_DB_HOST }} \
+            --environment-variables WORDPRESS_DB_HOST=${{ secrets.DB_HOST }} \
                                  WORDPRESS_DB_NAME=${{ secrets.WORDPRESS_DB_NAME }} \
-                                 WORDPRESS_DB_USER=${{ secrets.WORDPRESS_DB_USER }} \
-                                 WORDPRESS_DB_PASSWORD=${{ secrets.WORDPRESS_DB_PASSWORD }} \
-                                 EXT_DB_HOST=${{ secrets.EXT_DB_HOST }} \
+                                 WORDPRESS_DB_USER=${{ secrets.DB_USER }} \
+                                 WORDPRESS_DB_PASSWORD=${{ secrets.DB_PASSWORD }} \
+                                 EXT_DB_HOST=${{ secrets.DB_HOST }} \
                                  EXT_DB_NAME=${{ secrets.EXT_DB_NAME }} \
-                                 EXT_DB_USER=${{ secrets.EXT_DB_USER }} \
-                                 EXT_DB_PASSWORD=${{ secrets.EXT_DB_PASSWORD }} \
+                                 EXT_DB_USER=${{ secrets.DB_USER }} \
+                                 EXT_DB_PASSWORD=${{ secrets.DB_PASSWORD }} \
                                  AUTH_KEY="$AUTH_KEY" \
                                  SECURE_AUTH_KEY="$SECURE_AUTH_KEY" \
                                  LOGGED_IN_KEY="$LOGGED_IN_KEY" \
