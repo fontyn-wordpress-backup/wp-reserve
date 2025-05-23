@@ -53,7 +53,7 @@ jobs:
             --ports 80 \
             --ip-address Private \
             --vnet ${{ env.VNET_NAME }} \
-            --os-type Linux
+            --os-type Linux \
             --subnet ${{ env.SUBNET_NAME }} \
             --registry-login-server ${{ env.ACR_LOGIN_SERVER }} \
             --registry-username ${{ secrets.ACR_USERNAME }} \
