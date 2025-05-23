@@ -19,96 +19,55 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - name: Checkout repo
-      uses: actions/checkout@v3
+      - name: Checkout repo
+        uses: actions/checkout@v3
 
-    - name: Fetch WordPress salts from official API
-      id: fetch-salts
-      run: |
-        SALTS=$(curl -s https://api.wordpress.org/secret-key/1.1/salt/)
-        echo "$SALTS" > salts.txt
+      - name: Azure Login
+        uses: azure/login@v1
+        with:
+          creds: ${{ secrets.AZURE_CREDENTIALS }}
 
-        while read -r line; do
-          if echo "$line" | grep -q "define("; then
-              key=$(echo "$line" | sed -n "s/define('\([^']*\)', '\([^']*\)');/\1/p")
-              value=$(echo "$line" | sed -n "s/define('\([^']*\)', '\([^']*\)');/\2/p")
-              echo "::set-output name=$key::$value"
-          fi
-        done < salts.txt
+      - name: Build and push WordPress container image
+        env:
+          WP_SALTS: ${{ secrets.WP_SALTS }}
+        run: |
+          IMAGE_TAG=${{ github.sha }}
+          docker build --build-arg WP_SALTS="$WP_SALTS" \
+                       -t ${{ env.ACR_LOGIN_SERVER }}/wordpress:$IMAGE_TAG .
+          echo "${{ secrets.ACR_PASSWORD }}" | docker login ${{ env.ACR_LOGIN_SERVER }} -u ${{ secrets.ACR_USERNAME }} --password-stdin
+          docker push ${{ env.ACR_LOGIN_SERVER }}/wordpress:$IMAGE_TAG
 
-    - name: Azure Login
-      uses: azure/login@v1
-      with:
-        creds: ${{ secrets.AZURE_CREDENTIALS }}
+      - name: Deploy WordPress container to Azure Container Instances
+        env:
+          WP_SALTS: ${{ secrets.WP_SALTS }}
+        run: |
+          IMAGE_TAG=${{ github.sha }}
+          CONTAINER_NAME=${{ env.CONTAINER_NAME_PREFIX }}-${{ github.run_number }}
 
-    - name: Build and push WordPress container image
-      env:
-        AUTH_KEY: ${{ steps.fetch-salts.outputs.AUTH_KEY }}
-        SECURE_AUTH_KEY: ${{ steps.fetch-salts.outputs.SECURE_AUTH_KEY }}
-        LOGGED_IN_KEY: ${{ steps.fetch-salts.outputs.LOGGED_IN_KEY }}
-        NONCE_KEY: ${{ steps.fetch-salts.outputs.NONCE_KEY }}
-        AUTH_SALT: ${{ steps.fetch-salts.outputs.AUTH_SALT }}
-        SECURE_AUTH_SALT: ${{ steps.fetch-salts.outputs.SECURE_AUTH_SALT }}
-        LOGGED_IN_SALT: ${{ steps.fetch-salts.outputs.LOGGED_IN_SALT }}
-        NONCE_SALT: ${{ steps.fetch-salts.outputs.NONCE_SALT }}
-      run: |
-        IMAGE_TAG=${{ github.sha }}
-        docker build --build-arg AUTH_KEY="$AUTH_KEY" \
-                     --build-arg SECURE_AUTH_KEY="$SECURE_AUTH_KEY" \
-                     --build-arg LOGGED_IN_KEY="$LOGGED_IN_KEY" \
-                     --build-arg NONCE_KEY="$NONCE_KEY" \
-                     --build-arg AUTH_SALT="$AUTH_SALT" \
-                     --build-arg SECURE_AUTH_SALT="$SECURE_AUTH_SALT" \
-                     --build-arg LOGGED_IN_SALT="$LOGGED_IN_SALT" \
-                     --build-arg NONCE_SALT="$NONCE_SALT" \
-                     -t ${{ env.ACR_LOGIN_SERVER }}/wordpress:$IMAGE_TAG .
-        echo "${{ secrets.ACR_PASSWORD }}" | docker login ${{ env.ACR_LOGIN_SERVER }} -u ${{ secrets.ACR_USERNAME }} --password-stdin
-        docker push ${{ env.ACR_LOGIN_SERVER }}/wordpress:$IMAGE_TAG
-
-    - name: Deploy WordPress container to Azure Container Instances
-      env:
-        AUTH_KEY: ${{ steps.fetch-salts.outputs.AUTH_KEY }}
-        SECURE_AUTH_KEY: ${{ steps.fetch-salts.outputs.SECURE_AUTH_KEY }}
-        LOGGED_IN_KEY: ${{ steps.fetch-salts.outputs.LOGGED_IN_KEY }}
-        NONCE_KEY: ${{ steps.fetch-salts.outputs.NONCE_KEY }}
-        AUTH_SALT: ${{ steps.fetch-salts.outputs.AUTH_SALT }}
-        SECURE_AUTH_SALT: ${{ steps.fetch-salts.outputs.SECURE_AUTH_SALT }}
-        LOGGED_IN_SALT: ${{ steps.fetch-salts.outputs.LOGGED_IN_SALT }}
-        NONCE_SALT: ${{ steps.fetch-salts.outputs.NONCE_SALT }}
-      run: |
-        IMAGE_TAG=${{ github.sha }}
-        CONTAINER_NAME=${{ env.CONTAINER_NAME_PREFIX }}-${{ github.run_number }}
-
-        az container create \
-          --resource-group ${{ env.RESOURCE_GROUP }} \
-          --name $CONTAINER_NAME \
-          --image ${{ env.ACR_LOGIN_SERVER }}/wordpress:$IMAGE_TAG \
-          --cpu 1 \
-          --memory 1.5 \
-          --ports 80 \
-          --ip-address Private \
-          --vnet ${{ env.VNET_NAME }} \
-          --subnet ${{ env.SUBNET_NAME }} \
-          --registry-login-server ${{ env.ACR_LOGIN_SERVER }} \
-          --registry-username ${{ secrets.ACR_USERNAME }} \
-          --registry-password ${{ secrets.ACR_PASSWORD }} \
-          --azure-file-volume-account-name ${{ env.STORAGE_ACCOUNT_NAME }} \
-          --azure-file-volume-account-key ${{ secrets.AZURE_STORAGE_KEY }} \
-          --azure-file-volume-share-name ${{ env.FILE_SHARE_NAME }} \
-          --azure-file-volume-mount-path /var/www/html/wp-content \
-            --environment-variables WORDPRESS_DB_HOST=${{ secrets.DB_HOST }} \
-                                 WORDPRESS_DB_NAME=${{ secrets.WORDPRESS_DB_NAME }} \
-                                 WORDPRESS_DB_USER=${{ secrets.DB_USER }} \
-                                 WORDPRESS_DB_PASSWORD=${{ secrets.DB_PASSWORD }} \
-                                 EXT_DB_HOST=${{ secrets.DB_HOST }} \
-                                 EXT_DB_NAME=${{ secrets.EXT_DB_NAME }} \
-                                 EXT_DB_USER=${{ secrets.DB_USER }} \
-                                 EXT_DB_PASSWORD=${{ secrets.DB_PASSWORD }} \
-                                 AUTH_KEY="$AUTH_KEY" \
-                                 SECURE_AUTH_KEY="$SECURE_AUTH_KEY" \
-                                 LOGGED_IN_KEY="$LOGGED_IN_KEY" \
-                                 NONCE_KEY="$NONCE_KEY" \
-                                 AUTH_SALT="$AUTH_SALT" \
-                                 SECURE_AUTH_SALT="$SECURE_AUTH_SALT" \
-                                 LOGGED_IN_SALT="$LOGGED_IN_SALT" \
-                                 NONCE_SALT="$NONCE_SALT"
+          az container create \
+            --resource-group ${{ env.RESOURCE_GROUP }} \
+            --name $CONTAINER_NAME \
+            --image ${{ env.ACR_LOGIN_SERVER }}/wordpress:$IMAGE_TAG \
+            --cpu 1 \
+            --memory 1.5 \
+            --ports 80 \
+            --ip-address Private \
+            --vnet ${{ env.VNET_NAME }} \
+            --subnet ${{ env.SUBNET_NAME }} \
+            --registry-login-server ${{ env.ACR_LOGIN_SERVER }} \
+            --registry-username ${{ secrets.ACR_USERNAME }} \
+            --registry-password ${{ secrets.ACR_PASSWORD }} \
+            --azure-file-volume-account-name ${{ env.STORAGE_ACCOUNT_NAME }} \
+            --azure-file-volume-account-key ${{ secrets.AZURE_STORAGE_KEY }} \
+            --azure-file-volume-share-name ${{ env.FILE_SHARE_NAME }} \
+            --azure-file-volume-mount-path /var/www/html/wp-content \
+            --environment-variables \
+                WORDPRESS_DB_HOST=${{ secrets.DB_HOST }} \
+                WORDPRESS_DB_NAME=${{ secrets.WORDPRESS_DB_NAME }} \
+                WORDPRESS_DB_USER=${{ secrets.DB_USER }} \
+                WORDPRESS_DB_PASSWORD=${{ secrets.DB_PASSWORD }} \
+                EXT_DB_HOST=${{ secrets.DB_HOST }} \
+                EXT_DB_NAME=${{ secrets.EXT_DB_NAME }} \
+                EXT_DB_USER=${{ secrets.DB_USER }} \
+                EXT_DB_PASSWORD=${{ secrets.DB_PASSWORD }} \
+                WP_SALTS="${WP_SALTS}"
