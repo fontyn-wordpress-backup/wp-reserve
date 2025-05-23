@@ -2,8 +2,8 @@ name: Deploy Single WordPress container
 
 on:
   push:
-    branches:
-      - main
+    paths:
+      - 'wp-config.php'
 
 env:
   RESOURCE_GROUP: Rg-DevOps-NEU-01
