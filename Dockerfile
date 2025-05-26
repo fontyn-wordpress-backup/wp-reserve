@@ -1,6 +1,5 @@
 FROM wordpress:6.8-php8.2-apache
 
-# Accept the salts as build arguments
 ARG AUTH_KEY
 ARG SECURE_AUTH_KEY
 ARG LOGGED_IN_KEY
@@ -25,7 +24,10 @@ COPY wp-config.php /custom/wp-config.php
 COPY ./docker-entrypoint.sh /usr/local/bin/
 RUN chmod +x /usr/local/bin/docker-entrypoint.sh
 
+# Fix ownership and permissions for Apache user
+RUN chown -R www-data:www-data /var/www/html/wp-content/plugins/reservation-plugin /var/www/html/wp-config.php
+
 EXPOSE 80
 
-ENTRYPOINT ["docker-entrypoint.sh"]
+ENTRYPOINT ["/usr/local/bin/docker-entrypoint.sh"]
 CMD ["apache2-foreground"]
