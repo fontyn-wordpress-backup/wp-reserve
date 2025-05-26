@@ -8,7 +8,7 @@ on:
 env:
   RESOURCE_GROUP: Rg-DevOps-NEU-01
   ACR_LOGIN_SERVER: containerregistrywordpressneu01.azurecr.io
-  CONTAINER_NAME_PREFIX: wp
+  CONTAINER_NAME_PREFIX: Container-WordPress-NEU-
   STORAGE_ACCOUNT_NAME: saccountwordpressneu01
   FILE_SHARE_NAME: wpcontent
 
