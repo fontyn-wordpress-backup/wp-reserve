@@ -45,7 +45,6 @@ jobs:
         run: |
           IMAGE_TAG=${{ github.sha }}
           CONTAINER_NAME=${{ env.CONTAINER_NAME_PREFIX }}${{ github.run_number }}
-
           az container create \
             --resource-group ${{ env.RESOURCE_GROUP }} \
             --name $CONTAINER_NAME \
@@ -64,19 +63,19 @@ jobs:
             --azure-file-volume-share-name ${{ env.FILE_SHARE_NAME }} \
             --azure-file-volume-mount-path /var/www/html/wp-content \
             --environment-variables \
-                WORDPRESS_DB_HOST=${{ secrets.DB_HOST }} \
-                WORDPRESS_DB_NAME=${{ secrets.WORDPRESS_DB_NAME }} \
-                WORDPRESS_DB_USER=${{ secrets.DB_USER }} \
-                WORDPRESS_DB_PASSWORD=${{ secrets.DB_PASSWORD }} \
-                EXT_DB_HOST=${{ secrets.DB_HOST }} \
-                EXT_DB_NAME=${{ secrets.EXT_DB_NAME }} \
-                EXT_DB_USER=${{ secrets.DB_USER }} \
-                EXT_DB_PASSWORD=${{ secrets.DB_PASSWORD }} \
-                AUTH_KEY=${{ secrets.AUTH_KEY_SALT }} \
-                SECURE_AUTH_KEY=${{ secrets.SECURE_AUTH_KEY_SALT }} \
-                LOGGED_IN_KEY=${{ secrets.LOGGED_IN_KEY_SALT }} \
-                NONCE_KEY=${{ secrets.NONCE_KEY_SALT }} \
-                AUTH_SALT=${{ secrets.AUTH_SALT }} \
-                SECURE_AUTH_SALT=${{ secrets.SECURE_AUTH_SALT }} \
-                LOGGED_IN_SALT=${{ secrets.LOGGED_IN_SALT }} \
-                NONCE_SALT=${{ secrets.NONCE_SALT }} 
+                WORDPRESS_DB_HOST="${{ secrets.DB_HOST }}" \
+                WORDPRESS_DB_NAME="${{ secrets.WORDPRESS_DB_NAME }}" \
+                WORDPRESS_DB_USER="${{ secrets.DB_USER }}" \
+                WORDPRESS_DB_PASSWORD="${{ secrets.DB_PASSWORD }}" \
+                EXT_DB_HOST="${{ secrets.DB_HOST }}" \
+                EXT_DB_NAME="${{ secrets.EXT_DB_NAME }}" \
+                EXT_DB_USER="${{ secrets.DB_USER }}" \
+                EXT_DB_PASSWORD="${{ secrets.DB_PASSWORD }}" \
+                AUTH_KEY="${{ secrets.AUTH_KEY_SALT }}" \
+                SECURE_AUTH_KEY="${{ secrets.SECURE_AUTH_KEY_SALT }}" \
+                LOGGED_IN_KEY="${{ secrets.LOGGED_IN_KEY_SALT }}" \
+                NONCE_KEY="${{ secrets.NONCE_KEY_SALT }}" \
+                AUTH_SALT="${{ secrets.AUTH_SALT }}" \
+                SECURE_AUTH_SALT="${{ secrets.SECURE_AUTH_SALT }}" \
+                LOGGED_IN_SALT="${{ secrets.LOGGED_IN_SALT }}" \
+                NONCE_SALT="${{ secrets.NONCE_SALT }}"
