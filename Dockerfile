@@ -20,6 +20,7 @@ ENV LOGGED_IN_SALT=$LOGGED_IN_SALT
 ENV NONCE_SALT=$NONCE_SALT
 
 COPY custom-plugin /var/www/html/wp-content/plugins/reservation-plugin
+COPY wp-config.php /custom/wp-config.php
 
 COPY ./docker-entrypoint.sh /usr/local/bin/
 RUN chmod +x /usr/local/bin/docker-entrypoint.sh
