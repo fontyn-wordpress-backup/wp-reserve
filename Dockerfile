@@ -24,7 +24,6 @@ COPY wp-config.php /custom/wp-config.php
 COPY ./docker-entrypoint.sh /usr/local/bin/
 RUN chmod +x /usr/local/bin/docker-entrypoint.sh
 
-# Fix ownership and permissions for Apache user
 RUN chown -R www-data:www-data /var/www/html/wp-content/plugins/reservation-plugin /var/www/html/wp-config.php
 
 EXPOSE 80
