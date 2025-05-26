@@ -8,7 +8,7 @@ on:
 env:
   RESOURCE_GROUP: Rg-DevOps-NEU-01
   ACR_LOGIN_SERVER: containerregistrywordpressneu01.azurecr.io
-  CONTAINER_NAME_PREFIX: containerwordpress0
+  CONTAINER_NAME_PREFIX: container-wordpress-0
   STORAGE_ACCOUNT_NAME: saccountwordpressneu01
   FILE_SHARE_NAME: wpcontent
 
@@ -40,7 +40,7 @@ jobs:
           WP_SALTS: ${{ secrets.WP_SALTS }}
         run: |
           IMAGE_TAG=${{ github.sha }}
-          CONTAINER_NAME=${{ env.CONTAINER_NAME_PREFIX }}-${{ github.run_number }}
+          CONTAINER_NAME=${{ env.CONTAINER_NAME_PREFIX }}${{ github.run_number }}
 
           az container create \
             --resource-group ${{ env.RESOURCE_GROUP }} \
