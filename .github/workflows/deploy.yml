@@ -44,8 +44,6 @@ jobs:
           docker push ${{ env.ACR_LOGIN_SERVER }}/wordpress:$IMAGE_TAG
 
       - name: Deploy WordPress container to Azure Container Instances
-        env:
-          WP_SALTS: ${{ secrets.WP_SALTS }}
         run: |
           IMAGE_TAG=${{ github.sha }}
           CONTAINER_NAME=${{ env.CONTAINER_NAME_PREFIX }}${{ github.run_number }}
