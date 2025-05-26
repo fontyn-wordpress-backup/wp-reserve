@@ -12,17 +12,6 @@ define('EXT_DB_USER', getenv('EXT_DB_USER') ?: 'wpuser');
 define('EXT_DB_PASSWORD', getenv('EXT_DB_PASSWORD') ?: 'password');
 define('EXT_DB_HOST', DB_HOST); 
 
-$GLOBALS['ext_db_connection'] = new mysqli(
-    EXT_DB_HOST,
-    EXT_DB_USER,
-    EXT_DB_PASSWORD,
-    EXT_DB_NAME
-);
-
-if ($GLOBALS['ext_db_connection']->connect_error) {
-    error_log('External DB connection failed: ' . $GLOBALS['ext_db_connection']->connect_error);
-}
-
 define('AUTH_KEY', getenv('AUTH_KEY'));
 define('SECURE_AUTH_KEY', getenv('SECURE_AUTH_KEY'));
 define('LOGGED_IN_KEY', getenv('LOGGED_IN_KEY'));
