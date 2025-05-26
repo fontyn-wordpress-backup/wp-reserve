@@ -7,8 +7,6 @@ on:
 
 env:
   RESOURCE_GROUP: Rg-DevOps-NEU-01
-  VNET_ID: 44e5ecff-b824-4eb3-86ab-fff76c1626bd
-  SUBNET_NAME: App-Subnet
   ACR_LOGIN_SERVER: containerregistrywordpressneu01.azurecr.io
   CONTAINER_NAME_PREFIX: wp
   STORAGE_ACCOUNT_NAME: saccountwordpressneu01
@@ -52,9 +50,8 @@ jobs:
             --memory 1.5 \
             --ports 80 \
             --ip-address Private \
-            --vnet ${{ env.VNET_ID }} \
             --os-type Linux \
-            --subnet ${{ env.SUBNET_NAME }} \
+            --subnet ${{ secrets.SUBNET_ID }} \
             --registry-login-server ${{ env.ACR_LOGIN_SERVER }} \
             --registry-username ${{ secrets.ACR_USERNAME }} \
             --registry-password ${{ secrets.ACR_PASSWORD }} \
