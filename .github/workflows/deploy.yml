@@ -73,7 +73,7 @@ jobs:
                 EXT_DB_USER=${{ secrets.DB_USER }} \
                 EXT_DB_PASSWORD=${{ secrets.DB_PASSWORD }} \
                 AUTH_KEY=${{ secrets.AUTH_KEY_SALT }} \
-                SECURE_AUTH_KEY=${{ secrets.SECRET_AUTH_KEY_SALT }} \
+                SECURE_AUTH_KEY=${{ secrets.SECURE_AUTH_KEY_SALT }} \
                 LOGGED_IN_KEY=${{ secrets.LOGGED_IN_KEY_SALT }} \
                 NONCE_KEY=${{ secrets.NONCE_KEY_SALT }} \
                 AUTH_SALT=${{ secrets.AUTH_SALT }} \
