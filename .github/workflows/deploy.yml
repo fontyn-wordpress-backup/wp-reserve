@@ -30,8 +30,16 @@ jobs:
           WP_SALTS: ${{ secrets.WP_SALTS }}
         run: |
           IMAGE_TAG=${{ github.sha }}
-          docker build --build-arg WP_SALTS="$WP_SALTS" \
-                       -t ${{ env.ACR_LOGIN_SERVER }}/wordpress:$IMAGE_TAG .
+          docker build \
+            --build-arg AUTH_KEY="${{ secrets.AUTH_KEY_SALT }}" \
+            --build-arg SECURE_AUTH_KEY="${{ secrets.SECURE_AUTH_KEY_SALT }}" \
+            --build-arg LOGGED_IN_KEY="${{ secrets.LOGGED_IN_KEY)SALT }}" \
+            --build-arg NONCE_KEY="${{ secrets.NONCE_KEY_SALT }}" \
+            --build-arg AUTH_SALT="${{ secrets.AUTH_SALT }}" \
+            --build-arg SECURE_AUTH_SALT="${{ secrets.SECURE_AUTH_SALT }}" \
+            --build-arg LOGGED_IN_SALT="${{ secrets.LOGGED_IN_SALT }}" \
+            --build-arg NONCE_SALT="${{ secrets.NONCE_SALT }}" \
+            -t ${{ env.ACR_LOGIN_SERVER }}/wordpress:$IMAGE_TAG .
           echo "${{ secrets.ACR_PASSWORD }}" | docker login ${{ env.ACR_LOGIN_SERVER }} -u ${{ secrets.ACR_USERNAME }} --password-stdin
           docker push ${{ env.ACR_LOGIN_SERVER }}/wordpress:$IMAGE_TAG
 
