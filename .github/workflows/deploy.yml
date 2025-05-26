@@ -7,7 +7,7 @@ on:
 
 env:
   RESOURCE_GROUP: Rg-DevOps-NEU-01
-  VNET_NAME: VNet-SpokeWeb-NEU-01
+  VNET_ID: 44e5ecff-b824-4eb3-86ab-fff76c1626bd
   SUBNET_NAME: App-Subnet
   ACR_LOGIN_SERVER: containerregistrywordpressneu01.azurecr.io
   CONTAINER_NAME_PREFIX: wp
@@ -52,7 +52,7 @@ jobs:
             --memory 1.5 \
             --ports 80 \
             --ip-address Private \
-            --vnet ${{ env.VNET_NAME }} \
+            --vnet ${{ env.VNET_ID }} \
             --os-type Linux \
             --subnet ${{ env.SUBNET_NAME }} \
             --registry-login-server ${{ env.ACR_LOGIN_SERVER }} \
