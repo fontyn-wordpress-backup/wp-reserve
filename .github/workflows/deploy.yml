@@ -33,7 +33,7 @@ jobs:
           docker build \
             --build-arg AUTH_KEY="${{ secrets.AUTH_KEY_SALT }}" \
             --build-arg SECURE_AUTH_KEY="${{ secrets.SECURE_AUTH_KEY_SALT }}" \
-            --build-arg LOGGED_IN_KEY="${{ secrets.LOGGED_IN_KEY)SALT }}" \
+            --build-arg LOGGED_IN_KEY="${{ secrets.LOGGED_IN_KEY_SALT }}" \
             --build-arg NONCE_KEY="${{ secrets.NONCE_KEY_SALT }}" \
             --build-arg AUTH_SALT="${{ secrets.AUTH_SALT }}" \
             --build-arg SECURE_AUTH_SALT="${{ secrets.SECURE_AUTH_SALT }}" \
