@@ -26,8 +26,6 @@ jobs:
           creds: ${{ secrets.AZURE_CREDENTIALS }}
 
       - name: Build and push WordPress container image
-        env:
-          WP_SALTS: ${{ secrets.WP_SALTS }}
         run: |
           IMAGE_TAG=${{ github.sha }}
           docker build \
