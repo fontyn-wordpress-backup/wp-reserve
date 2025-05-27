@@ -6,10 +6,10 @@ on:
       - 'wp-config.php'
 
 env:
-  RESOURCE_GROUP: Rg-DevOps-NEU-01
-  ACR_LOGIN_SERVER: containerregistrywordpressneu01.azurecr.io
+  RESOURCE_GROUP: Rg-DevOps-GWC-02
+  ACR_LOGIN_SERVER: containerregistrywordpressgwc01.azurecr.io
   CONTAINER_NAME_PREFIX: container-wordpress-0
-  STORAGE_ACCOUNT_NAME: saccountwordpressneu01
+  STORAGE_ACCOUNT_NAME: saccountwordpressgwc01
   FILE_SHARE_NAME: wpcontent
 
 jobs:
