@@ -1,5 +1,5 @@
 <?php
-//Terra Test 3
+//First Full WP Deploy Test
 define('DB_NAME', getenv('WORDPRESS_DB_NAME') ?: 'wordpress_db');
 define('DB_USER', getenv('WORDPRESS_DB_USER') ?: 'wpuser');
 define('DB_PASSWORD', getenv('WORDPRESS_DB_PASSWORD') ?: 'password');
