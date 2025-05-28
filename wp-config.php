@@ -21,6 +21,10 @@ define('SECURE_AUTH_SALT', getenv('SECURE_AUTH_SALT'));
 define('LOGGED_IN_SALT', getenv('LOGGED_IN_SALT'));
 define('NONCE_SALT', getenv('NONCE_SALT'));
 
+define('CBP_ENCRYPTION_KEY', getenv('CBP_ENCRYPTION_KEY'));
+define('CBP_ENCRYPTION_IV', getenv('CBP_ENCRYPTION_IV'));
+
+
 define('WP_CACHE', true);
 define('WP_POST_REVISIONS', 5);
 
