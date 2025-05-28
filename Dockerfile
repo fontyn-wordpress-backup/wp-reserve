@@ -21,7 +21,7 @@ ENV NONCE_SALT=$NONCE_SALT
 COPY custom-plugin /var/www/html/wp-content/plugins/
 COPY wp-config.php /var/www/html/wp-config.php
 
-RUN chown -R www-data:www-data /var/www/html/wp-content/plugins/reservation-plugin /var/www/html/wp-config.php
+RUN chown -R www-data:www-data /var/www/html/wp-content/plugins/ /var/www/html/wp-config.php
 
 EXPOSE 80
 
