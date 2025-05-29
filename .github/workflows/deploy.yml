@@ -27,7 +27,7 @@ jobs:
 
       - name: Build and push WordPress container image
         run: |
-          IMAGE_TAG=${{ github.sha }}
+          IMAGE_TAG="latest"
           docker build \
             --build-arg AUTH_KEY="${{ secrets.AUTH_KEY_SALT }}" \
             --build-arg SECURE_AUTH_KEY="${{ secrets.SECURE_AUTH_KEY_SALT }}" \
