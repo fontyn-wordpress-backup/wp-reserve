@@ -37,7 +37,7 @@ jobs:
             --build-arg SECURE_AUTH_SALT="${{ secrets.SECURE_AUTH_SALT }}" \
             --build-arg LOGGED_IN_SALT="${{ secrets.LOGGED_IN_SALT }}" \
             --build-arg NONCE_SALT="${{ secrets.NONCE_SALT }}" \
-            -t ${{ env.ACR_LOGIN_SERVER }}/wordpress:$IMAGE_TAG .
+          -t ${{ env.ACR_LOGIN_SERVER }}/wordpress:$IMAGE_TAG .
           echo "${{ secrets.ACR_PASSWORD }}" | docker login ${{ env.ACR_LOGIN_SERVER }} -u ${{ secrets.ACR_USERNAME }} --password-stdin
           docker push ${{ env.ACR_LOGIN_SERVER }}/wordpress:$IMAGE_TAG
 
