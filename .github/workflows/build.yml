@@ -1,0 +1,33 @@
+name: Build and Push WordPress Image
+
+on:
+  push:
+    branches:
+      - main
+
+env:
+  ACR_LOGIN_SERVER: containerregistrywordpressgwc01.azurecr.io
+
+jobs:
+  build-and-push:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v3
+
+      - name: Build and push WordPress container image
+        run: |
+          IMAGE_TAG="latest"
+          docker build \
+            --build-arg AUTH_KEY="${{ secrets.AUTH_KEY_SALT }}" \
+            --build-arg SECURE_AUTH_KEY="${{ secrets.SECURE_AUTH_KEY_SALT }}" \
+            --build-arg LOGGED_IN_KEY="${{ secrets.LOGGED_IN_KEY_SALT }}" \
+            --build-arg NONCE_KEY="${{ secrets.NONCE_KEY_SALT }}" \
+            --build-arg AUTH_SALT="${{ secrets.AUTH_SALT }}" \
+            --build-arg SECURE_AUTH_SALT="${{ secrets.SECURE_AUTH_SALT }}" \
+            --build-arg LOGGED_IN_SALT="${{ secrets.LOGGED_IN_SALT }}" \
+            --build-arg NONCE_SALT="${{ secrets.NONCE_SALT }}" \
+            -t ${{ env.ACR_LOGIN_SERVER }}/wordpress:$IMAGE_TAG .
+          echo "${{ secrets.ACR_PASSWORD }}" | docker login ${{ env.ACR_LOGIN_SERVER }} -u ${{ secrets.ACR_USERNAME }} --password-stdin
+          docker push ${{ env.ACR_LOGIN_SERVER }}/wordpress:$IMAGE_TAG
