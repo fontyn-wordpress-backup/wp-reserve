@@ -68,14 +68,14 @@ jobs:
                 CERT_SHARE_NAME="${{ secrets.CERT_SHARE_NAME }}"
 
           CONTAINER_IP=$(az container show \
-            --resource-group ${{ env.RESOURCE_GROUP }} \
+            --resource-group ${{ secrets.LB_RESOURCE_GROUP }} \
             --name $CONTAINER_NAME \
             --query "ipAddress.ip" \
             -o tsv)
           echo "Container IP is $CONTAINER_IP"
 
           az network lb address-pool address add \
-            --resource-group ${{ env.RESOURCE_GROUP }} \
+            --resource-group ${{ secrets.LB_RESOURCE_GROUP }} \
             --lb-name "${{ secrets.LB_NAME }}" \
             --pool-name "${{ secrets.ADDRESS_POOL_NAME }}" \
             --name "${CONTAINER_NAME}-address" \
