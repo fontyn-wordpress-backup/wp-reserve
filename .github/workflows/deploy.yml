@@ -1,0 +1,83 @@
+name: Deploy WordPress Container
+
+on:
+  workflow_dispatch:    # Manual trigger, so you can deploy on demand
+
+env:
+  RESOURCE_GROUP: Rg-DevOps-GWC-02
+  ACR_LOGIN_SERVER: containerregistrywordpressgwc01.azurecr.io
+  CONTAINER_NAME_PREFIX: container-wordpress-
+  STORAGE_ACCOUNT_NAME: saccountwordpressgwc01
+  FILE_SHARE_NAME: wpcontent
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      # Step 1: Azure login using service principal credentials stored in GitHub secrets
+      - name: Azure Login
+        uses: azure/login@v1
+        with:
+          creds: ${{ secrets.AZURE_CREDENTIALS }}
+
+      # Step 2: Deploy WordPress container instance
+      - name: Deploy WordPress container to Azure Container Instances
+        run: |
+          # Set image tag and container name (unique per run)
+          IMAGE_TAG="latest"
+          CONTAINER_NAME="${{ env.CONTAINER_NAME_PREFIX }}${{ github.run_number }}"
+          
+          echo "Deploying container: $CONTAINER_NAME"
+
+          # Azure CLI command to create container
+          az container create \
+            --resource-group ${{ env.RESOURCE_GROUP }} \
+            --name $CONTAINER_NAME \
+            --image ${{ env.ACR_LOGIN_SERVER }}/wordpress:$IMAGE_TAG \
+            --cpu 1 \
+            --memory 1.5 \
+            --ports 443 \
+            --ip-address Private \
+            --os-type Linux \
+            --subnet ${{ secrets.SUBNET_ID }} \
+            --registry-login-server ${{ env.ACR_LOGIN_SERVER }} \
+            --registry-username ${{ secrets.ACR_USERNAME }} \
+            --registry-password ${{ secrets.ACR_PASSWORD }} \
+            --azure-file-volume-account-name ${{ env.STORAGE_ACCOUNT_NAME }} \
+            --azure-file-volume-account-key ${{ secrets.AZURE_STORAGE_KEY }} \
+            --azure-file-volume-share-name ${{ env.FILE_SHARE_NAME }} \
+            --azure-file-volume-mount-path /mnt/wpcontent \
+            --environment-variables \
+                WORDPRESS_DB_HOST="${{ secrets.DB_HOST }}" \
+                WORDPRESS_DB_NAME="${{ secrets.WORDPRESS_DB_NAME }}" \
+                WORDPRESS_DB_USER="${{ secrets.DB_USER }}" \
+                WORDPRESS_DB_PASSWORD="${{ secrets.DB_PASSWORD }}" \
+                EXT_DB_HOST="${{ secrets.DB_HOST }}" \
+                EXT_DB_NAME="${{ secrets.EXT_DB_NAME }}" \
+                EXT_DB_USER="${{ secrets.DB_USER }}" \
+                EXT_DB_PASSWORD="${{ secrets.DB_PASSWORD }}" \
+                AUTH_KEY="${{ secrets.AUTH_KEY_SALT }}" \
+                SECURE_AUTH_KEY="${{ secrets.SECURE_AUTH_KEY_SALT }}" \
+                LOGGED_IN_KEY="${{ secrets.LOGGED_IN_KEY_SALT }}" \
+                NONCE_KEY="${{ secrets.NONCE_KEY_SALT }}" \
+                AUTH_SALT="${{ secrets.AUTH_SALT }}" \
+                SECURE_AUTH_SALT="${{ secrets.SECURE_AUTH_SALT }}" \
+                LOGGED_IN_SALT="${{ secrets.LOGGED_IN_SALT }}" \
+                NONCE_SALT="${{ secrets.NONCE_SALT }}" \
+                CBP_ENCRYPTION_KEY="${{ secrets.CBP_ENCRYPTION_KEY }}" \
+                CBP_ENCRYPTION_IV="${{ secrets.CBP_ENCRYPTION_IV }}" \
+                CERT_SHARE_NAME="${{ secrets.CERT_SHARE_NAME }}"
+
+          CONTAINER_IP=$(az container show \
+            --resource-group ${{ env.RESOURCE_GROUP }} \
+            --name $CONTAINER_NAME \
+            --query "ipAddress.ip" \
+            -o tsv)
+          echo "Container IP is $CONTAINER_IP"
+
+          az network lb address-pool address add \
+            --resource-group ${{ env.RESOURCE_GROUP }} \
+            --lb-name "${{ secrets.LB_NAME }}" \
+            --address-pool-name "${{ secrets.ADDRESS_POOL }}" \
+            --ip-address $CONTAINER_IP
