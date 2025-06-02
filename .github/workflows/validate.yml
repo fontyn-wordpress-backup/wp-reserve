@@ -1,0 +1,51 @@
+name: Check Required Files and Trigger Build
+
+on:
+  push:
+    branches:
+
+      - master
+
+jobs:
+  check-required-files:
+    runs-on: ubuntu-latest
+    outputs:
+      all-files-present: ${{ steps.check.outputs.all-present }}
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - id: check
+        name: Check required files and folders
+        run: |
+          missing=0
+          required_paths=(
+            "Dockerfile"
+            "default-ssl.conf"
+            "wp-config.php"
+            "custom-plugin/custom-booking-plugin.php"
+            ".github/workflows/build.yml"
+            ".github/workflows/deploy.yml"
+            ".github/workflows/destroy.yml"
+          )
+
+          for path in "${required_paths[@]}"; do
+            if [ ! -e "$path" ]; then
+              echo "::error ::Missing: $path"
+              missing=1
+            else
+              echo "✅ Found: $path"
+            fi
+          done
+
+          if [ $missing -eq 1 ]; then
+            echo "all-present=false" >> $GITHUB_OUTPUT
+            exit 1
+          else
+            echo "all-present=true" >> $GITHUB_OUTPUT
+          fi
+
+  trigger-build:
+    needs: check-required-files
+    if: needs.check-required-files.outputs.all-files-present == 'true'
+    uses: ./.github/workflows/build.yml
