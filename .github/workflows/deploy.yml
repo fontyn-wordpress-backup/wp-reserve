@@ -43,7 +43,7 @@ jobs:
 
       - name: Deploy WordPress container to Azure Container Instances
         run: |
-          IMAGE_TAG=${{ github.sha }}
+          IMAGE_TAG="latest"
           CONTAINER_NAME=${{ env.CONTAINER_NAME_PREFIX }}${{ github.run_number }}
           az container create \
             --resource-group ${{ env.RESOURCE_GROUP }} \
