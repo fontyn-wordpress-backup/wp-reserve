@@ -24,13 +24,11 @@ COPY wp-config.php /var/www/html/wp-config.php
 RUN chown -R www-data:www-data /var/www/html/wp-content/plugins/ /var/www/html/wp-config.php
 
 RUN a2enmod ssl
-COPY default-ssl.conf /etc/apache2/sites-available/default-ssl.conf
-RUN a2ensite default-ssl.conf
 
-# Copy the entrypoint script into the image
-COPY docker-entrypoint.sh /usr/local/bin/docker-entrypoint.sh
-RUN chmod +x /usr/local/bin/docker-entrypoint.sh
+COPY default-ssl.conf /etc/apache2/sites-available/default-ssl.conf
+
+RUN  a2ensite default-ssl.conf
 
 EXPOSE 443
 
-ENTRYPOINT ["/usr/local/bin/docker-entrypoint.sh"]
+CMD ["apache2-foreground"]
