@@ -1,0 +1,45 @@
+name: Destroy WordPress Container
+
+on:
+  workflow_dispatch:
+    inputs:
+      containerName:
+        description: 'Azure container name to destroy (e.g., container-wordpress-52)'
+        required: true
+
+env:
+  RESOURCE_GROUP: Rg-DevOps-GWC-02
+
+jobs:
+  destroy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Azure Login
+        uses: azure/login@v1
+        with:
+          creds: ${{ secrets.AZURE_CREDENTIALS }}
+
+      - name: Delete WordPress container
+        run: |
+          CONTAINER_NAME="${{ github.event.inputs.containerName }}"
+          echo "Deleting container: $CONTAINER_NAME"
+
+          az container delete \
+            --resource-group ${{ env.RESOURCE_GROUP }} \
+            --name $CONTAINER_NAME \
+            --yes || echo "Container $CONTAINER_NAME may already be deleted."
+
+      - name: Remove from Load Balancer backend pool
+        run: |
+          CONTAINER_NAME="${{ github.event.inputs.containerName }}"
+          BACKEND_ENTRY_NAME="${CONTAINER_NAME}-address"
+
+          echo "Deregistering backend address: $BACKEND_ENTRY_NAME"
+
+          az network lb address-pool address remove \
+            --resource-group ${{ secrets.LB_RESOURCE_GROUP }} \
+            --lb-name "${{ secrets.LB_NAME }}" \
+            --pool-name "${{ secrets.ADDRESS_POOL_NAME }}" \
+            --name "$BACKEND_ENTRY_NAME" \
+            || echo "Backend address $BACKEND_ENTRY_NAME not found or already removed."
