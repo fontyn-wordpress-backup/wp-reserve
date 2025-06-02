@@ -25,23 +25,9 @@ RUN chown -R www-data:www-data /var/www/html/wp-content/plugins/ /var/www/html/w
 
 RUN a2enmod ssl
 
-RUN bash -c "cat > /etc/apache2/sites-available/default-ssl.conf <<'EOF'
-<VirtualHost *:443>
-    ServerAdmin webmaster@localhost
-    DocumentRoot /var/www/html
+COPY default-ssl.conf /etc/apache2/sites-available/default-ssl.conf
 
-    SSLEngine on
-    SSLCertificateFile /certs/wordpress.crt
-    SSLCertificateKeyFile /certs/wordpress.key
-
-    <Directory /var/www/html>
-        AllowOverride All
-        Require all granted
-    </Directory>
-</VirtualHost>
-EOF"
-
-RUN a2ensite default-ssl.conf
+RUN  a2ensite default-ssl.conf
 
 EXPOSE 443
 
