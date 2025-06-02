@@ -80,5 +80,5 @@ jobs:
                 LOGGED_IN_SALT="${{ secrets.LOGGED_IN_SALT }}" \
                 NONCE_SALT="${{ secrets.NONCE_SALT }}" \
                 CBP_ENCRYPTION_KEY="${{ secrets.CBP_ENCRYPTION_KEY }}" \
-                CBP_ENCRYPTION_IV="${{ secrets.CBP_ENCRYPTION_IV }}"
+                CBP_ENCRYPTION_IV="${{ secrets.CBP_ENCRYPTION_IV }}" \
                 CERT_SHARE_NAME = "${{ secrets.CERT_SHARE_NAME }}"
