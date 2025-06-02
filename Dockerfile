@@ -24,10 +24,11 @@ COPY wp-config.php /var/www/html/wp-config.php
 RUN chown -R www-data:www-data /var/www/html/wp-content/plugins/ /var/www/html/wp-config.php
 
 RUN a2enmod ssl
-
 COPY default-ssl.conf /etc/apache2/sites-available/default-ssl.conf
+RUN a2ensite default-ssl.conf
 
-RUN  a2ensite default-ssl.conf
+RUN rm -rf /var/www/html/wp-content && \
+    ln -s /mnt/wpcontent /var/www/html/wp-content
 
 EXPOSE 443
 
