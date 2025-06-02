@@ -1,9 +1,7 @@
 name: Build and Push WordPress Image
 
 on:
-  push:
-    branches:
-      - master
+  workflow_call:
 
 env:
   ACR_LOGIN_SERVER: containerregistrywordpressgwc01.azurecr.io
