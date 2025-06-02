@@ -79,4 +79,5 @@ jobs:
             --lb-name "${{ secrets.LB_NAME }}" \
             --pool-name "${{ secrets.ADDRESS_POOL_NAME }}" \
             --name "${CONTAINER_NAME}-address" \
+            --subnet ${{ secrets.SUBNET_ID }} \
             --ip-address $CONTAINER_IP
