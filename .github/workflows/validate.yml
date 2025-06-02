@@ -46,6 +46,17 @@ jobs:
           fi
 
   trigger-build:
+    secrets:
+      ACR_USERNAME: ${{ secrets.ACR_USERNAME }}
+      ACR_PASSWORD: ${{ secrets.ACR_PASSWORD }}
+      AUTH_KEY_SALT: ${{ secrets.AUTH_KEY_SALT }}
+      SECURE_AUTH_KEY_SALT: ${{ secrets.SECURE_AUTH_KEY_SALT }}
+      LOGGED_IN_KEY_SALT: ${{ secrets.LOGGED_IN_KEY_SALT }}
+      NONCE_KEY_SALT: ${{ secrets.NONCE_KEY_SALT }}
+      AUTH_SALT: ${{ secrets.AUTH_SALT }}
+      SECURE_AUTH_SALT: ${{ secrets.SECURE_AUTH_SALT }}
+      LOGGED_IN_SALT: ${{ secrets.LOGGED_IN_SALT }}
+      NONCE_SALT: ${{ secrets.NONCE_SALT }}
     needs: check-required-files
     if: needs.check-required-files.outputs.all-files-present == 'true'
     uses: ./.github/workflows/build.yml
