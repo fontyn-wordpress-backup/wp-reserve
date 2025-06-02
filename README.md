@@ -1,0 +1,1 @@
+Github Repo for building WordPress image based on custom wp-config and using a custom plugin. Uses workflows to build, deploy and destroy container (images). Validates subdirectory existance on push to master.
