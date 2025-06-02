@@ -1,7 +1,7 @@
 name: Deploy WordPress Container
 
 on:
-  workflow_dispatch:    # Manual trigger, so you can deploy on demand
+  workflow_dispatch:
 
 env:
   RESOURCE_GROUP: Rg-DevOps-GWC-02
@@ -15,13 +15,11 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      # Step 1: Azure login using service principal credentials stored in GitHub secrets
       - name: Azure Login
         uses: azure/login@v1
         with:
           creds: ${{ secrets.AZURE_CREDENTIALS }}
 
-      # Step 2: Deploy WordPress container instance
       - name: Deploy WordPress container to Azure Container Instances
         run: |
           # Set image tag and container name (unique per run)
