@@ -77,6 +77,6 @@ jobs:
           az network lb address-pool address add \
             --resource-group ${{ env.RESOURCE_GROUP }} \
             --lb-name "${{ secrets.LB_NAME }}" \
-            --address-pool-name "${{ secrets.ADDRESS_POOL }}" \
+            --pool-name "${{ secrets.ADDRESS_POOL }}" \
             --name "${CONTAINER_NAME}-address" \
             --ip-address $CONTAINER_IP
