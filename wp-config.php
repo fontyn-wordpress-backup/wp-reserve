@@ -12,6 +12,9 @@ define('EXT_DB_USER', getenv('EXT_DB_USER') ?: 'wpuser');
 define('EXT_DB_PASSWORD', getenv('EXT_DB_PASSWORD') ?: 'password');
 define('EXT_DB_HOST', DB_HOST); 
 
+define('WP_HOME','http://10.0.0.4');
+define('WP_SITEURL','http://10.0.0.4');
+
 define('AUTH_KEY', getenv('AUTH_KEY'));
 define('SECURE_AUTH_KEY', getenv('SECURE_AUTH_KEY'));
 define('LOGGED_IN_KEY', getenv('LOGGED_IN_KEY'));
