@@ -60,34 +60,8 @@ jobs:
             --registry-password ${{ secrets.ACR_PASSWORD }} \
             --azure-file-volume-account-name ${{ env.STORAGE_ACCOUNT_NAME }} \
             --azure-file-volume-account-key ${{ secrets.AZURE_STORAGE_KEY }} \
-            --volumes '[
-              {
-                "name": "wpcontent",
-                "azureFile": {
-                  "shareName": "'$FILE_SHARE_NAME'",
-                  "storageAccountName": "'$STORAGE_ACCOUNT_NAME'",
-                  "storageAccountKey": "'$STORAGE_ACCOUNT_KEY'"
-                }
-              },
-              {
-                "name": "certs",
-                "azureFile": {
-                  "shareName": "'$CERT_SHARE_NAME'",
-                  "storageAccountName": "'$STORAGE_ACCOUNT_NAME'",
-                  "storageAccountKey": "'$STORAGE_ACCOUNT_KEY'"
-                }
-              }
-            ]' \
-            --volume-mounts '[
-              {
-                "name": "wpcontent",
-                "mountPath": "/var/www/html/wp-content"
-              },
-              {
-              "name": "certs",
-              "mountPath": "/certs"
-              }
-            ]' \
+            --azure-file-volume-share-name ${{ env.FILE_SHARE_NAME }} \
+            --azure-file-volume-mount-path /mnt/wpcontent \
             --environment-variables \
                 WORDPRESS_DB_HOST="${{ secrets.DB_HOST }}" \
                 WORDPRESS_DB_NAME="${{ secrets.WORDPRESS_DB_NAME }}" \
