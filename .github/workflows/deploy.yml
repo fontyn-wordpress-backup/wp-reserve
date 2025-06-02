@@ -46,6 +46,7 @@ jobs:
             --azure-file-volume-account-key ${{ secrets.AZURE_STORAGE_KEY }} \
             --azure-file-volume-share-name ${{ env.FILE_SHARE_NAME }} \
             --azure-file-volume-mount-path /var/www/html/wp-content \
+            --restart-policy Never \
             --environment-variables \
                 WORDPRESS_DB_HOST="${{ secrets.DB_HOST }}" \
                 WORDPRESS_DB_NAME="${{ secrets.WORDPRESS_DB_NAME }}" \
