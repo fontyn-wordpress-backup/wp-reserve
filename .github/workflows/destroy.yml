@@ -20,18 +20,9 @@ jobs:
         with:
           creds: ${{ secrets.AZURE_CREDENTIALS }}
 
-      - name: Delete WordPress container
+      - name: Deregister container from Load Balancer
         run: |
-          CONTAINER_NAME="${{ github.event.inputs.containerName }}"
-          echo "Deleting container: $CONTAINER_NAME"
-
-          az container delete \
-            --resource-group ${{ env.RESOURCE_GROUP }} \
-            --name $CONTAINER_NAME \
-            --yes || echo "Container $CONTAINER_NAME may already be deleted."
-
-      - name: Remove from Load Balancer backend pool
-        run: |
+          set -e
           CONTAINER_NAME="${{ github.event.inputs.containerName }}"
           BACKEND_ENTRY_NAME="${CONTAINER_NAME}-address"
 
@@ -44,3 +35,19 @@ jobs:
             --name "$BACKEND_ENTRY_NAME" \
             --subnet "${{ secrets.SUBNET_ID }}" \
             || echo "Backend address $BACKEND_ENTRY_NAME not found or already removed."
+
+      - name: Wait for active connections to drain
+        run: |
+          echo "Waiting 10 seconds for requests to drain..."
+          sleep 10
+
+      - name: Delete WordPress container
+        run: |
+          set -e
+          CONTAINER_NAME="${{ github.event.inputs.containerName }}"
+          echo "Deleting container: $CONTAINER_NAME"
+
+          az container delete \
+            --resource-group ${{ env.RESOURCE_GROUP }} \
+            --name $CONTAINER_NAME \
+            --yes || echo "Container $CONTAINER_NAME may already be deleted."
