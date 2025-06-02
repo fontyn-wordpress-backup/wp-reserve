@@ -68,7 +68,7 @@ jobs:
                 CERT_SHARE_NAME="${{ secrets.CERT_SHARE_NAME }}"
 
           CONTAINER_IP=$(az container show \
-            --resource-group ${{ secrets.LB_RESOURCE_GROUP }} \
+            --resource-group ${{ env.RESOURCE_GROUP }} \
             --name $CONTAINER_NAME \
             --query "ipAddress.ip" \
             -o tsv)
