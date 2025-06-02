@@ -27,9 +27,6 @@ RUN a2enmod ssl
 COPY default-ssl.conf /etc/apache2/sites-available/default-ssl.conf
 RUN a2ensite default-ssl.conf
 
-RUN rm -rf /var/www/html/wp-content && \
-    ln -s /mnt/wpcontent /var/www/html/wp-content
-
 EXPOSE 443
 
 CMD ["apache2-foreground"]
