@@ -1,5 +1,5 @@
 <?php
-// Full WP Deploy Test with SSL
+// Full WP Deploy Test with SSL 2
 define('DB_NAME', getenv('WORDPRESS_DB_NAME') ?: 'wordpress_db');
 define('DB_USER', getenv('WORDPRESS_DB_USER') ?: 'wpuser');
 define('DB_PASSWORD', getenv('WORDPRESS_DB_PASSWORD') ?: 'password');
