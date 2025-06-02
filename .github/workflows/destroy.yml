@@ -42,4 +42,5 @@ jobs:
             --lb-name "${{ secrets.LB_NAME }}" \
             --pool-name "${{ secrets.ADDRESS_POOL_NAME }}" \
             --name "$BACKEND_ENTRY_NAME" \
+            --subnet "${{ secrets.SUBNET_ID }}" \
             || echo "Backend address $BACKEND_ENTRY_NAME not found or already removed."
