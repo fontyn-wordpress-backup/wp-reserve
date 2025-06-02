@@ -23,6 +23,24 @@ COPY wp-config.php /var/www/html/wp-config.php
 
 RUN chown -R www-data:www-data /var/www/html/wp-content/plugins/ /var/www/html/wp-config.php
 
-EXPOSE 80
+RUN a2enmod ssl
+
+RUN echo '<VirtualHost *:443>
+    ServerAdmin webmaster@localhost
+    DocumentRoot /var/www/html
+
+    SSLEngine on
+    SSLCertificateFile /certs/wordpress.crt
+    SSLCertificateKeyFile /certs/wordpress.key
+
+    <Directory /var/www/html>
+        AllowOverride All
+        Require all granted
+    </Directory>
+</VirtualHost>' > /etc/apache2/sites-available/default-ssl.conf
+
+RUN a2ensite default-ssl.conf
+
+EXPOSE 443
 
 CMD ["apache2-foreground"]
