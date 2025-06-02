@@ -51,7 +51,7 @@ jobs:
             --image ${{ env.ACR_LOGIN_SERVER }}/wordpress:$IMAGE_TAG \
             --cpu 1 \
             --memory 1.5 \
-            --ports 80 \
+            --ports 443 \
             --ip-address Private \
             --os-type Linux \
             --subnet ${{ secrets.SUBNET_ID }} \
@@ -62,6 +62,8 @@ jobs:
             --azure-file-volume-account-key ${{ secrets.AZURE_STORAGE_KEY }} \
             --azure-file-volume-share-name ${{ env.FILE_SHARE_NAME }} \
             --azure-file-volume-mount-path /var/www/html/wp-content \
+            --azure-file-volume-share-name ${{ env.CERT_SHARE_NAME }} \
+            --azure-file-volume-mount-path /certs \
             --environment-variables \
                 WORDPRESS_DB_HOST="${{ secrets.DB_HOST }}" \
                 WORDPRESS_DB_NAME="${{ secrets.WORDPRESS_DB_NAME }}" \
@@ -81,3 +83,4 @@ jobs:
                 NONCE_SALT="${{ secrets.NONCE_SALT }}" \
                 CBP_ENCRYPTION_KEY="${{ secrets.CBP_ENCRYPTION_KEY }}" \
                 CBP_ENCRYPTION_IV="${{ secrets.CBP_ENCRYPTION_IV }}"
+                CERT_SHARE_NAME = "${{ secrets.CERT_SHARE_NAME }}"
