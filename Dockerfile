@@ -25,7 +25,8 @@ RUN chown -R www-data:www-data /var/www/html/wp-content/plugins/ /var/www/html/w
 
 RUN a2enmod ssl
 
-RUN echo '<VirtualHost *:443>
+RUN bash -c "cat > /etc/apache2/sites-available/default-ssl.conf <<'EOF'
+<VirtualHost *:443>
     ServerAdmin webmaster@localhost
     DocumentRoot /var/www/html
 
@@ -37,7 +38,8 @@ RUN echo '<VirtualHost *:443>
         AllowOverride All
         Require all granted
     </Directory>
-</VirtualHost>' > /etc/apache2/sites-available/default-ssl.conf
+</VirtualHost>
+EOF"
 
 RUN a2ensite default-ssl.conf
 
