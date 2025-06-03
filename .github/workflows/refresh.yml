@@ -23,6 +23,10 @@ on:
         required: true
       NONCE_SALT:
         required: true
+      AZURE_CREDENTIALS:      
+        required: true
+      AZURE_STORAGE_KEY:     
+        required: true
 env:
   RESOURCE_GROUP: Rg-DevOps-GWC-02
   ACR_LOGIN_SERVER: containerregistrywordpressgwc01.azurecr.io
