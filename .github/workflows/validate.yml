@@ -46,20 +46,14 @@ jobs:
           fi
 
   trigger-build:
+    needs: check-required-files
+    if: needs.check-required-files.outputs.all-files-present == 'true'
+    uses: ./.github/workflows/build.yml
     secrets:
-      ACR_USERNAME: ${{ secrets.ACR_USERNAME }}
-      ACR_PASSWORD: ${{ secrets.ACR_PASSWORD }}
-      AUTH_KEY_SALT: ${{ secrets.AUTH_KEY_SALT }}
-      SECURE_AUTH_KEY_SALT: ${{ secrets.SECURE_AUTH_KEY_SALT }}
-      LOGGED_IN_KEY_SALT: ${{ secrets.LOGGED_IN_KEY_SALT }}
-      NONCE_KEY_SALT: ${{ secrets.NONCE_KEY_SALT }}
-      AUTH_SALT: ${{ secrets.AUTH_SALT }}
-      SECURE_AUTH_SALT: ${{ secrets.SECURE_AUTH_SALT }}
-      LOGGED_IN_SALT: ${{ secrets.LOGGED_IN_SALT }}
-      NONCE_SALT: ${{ secrets.NONCE_SALT }}
-
       AZURE_CREDENTIALS: ${{ secrets.AZURE_CREDENTIALS }}
       AZURE_STORAGE_KEY: ${{ secrets.AZURE_STORAGE_KEY }}
+      ACR_USERNAME: ${{ secrets.ACR_USERNAME }}
+      ACR_PASSWORD: ${{ secrets.ACR_PASSWORD }}
       SUBNET_ID: ${{ secrets.SUBNET_ID }}
       DB_HOST: ${{ secrets.DB_HOST }}
       WORDPRESS_DB_NAME: ${{ secrets.WORDPRESS_DB_NAME }}
@@ -72,6 +66,11 @@ jobs:
       LB_RESOURCE_GROUP: ${{ secrets.LB_RESOURCE_GROUP }}
       LB_NAME: ${{ secrets.LB_NAME }}
       ADDRESS_POOL_NAME: ${{ secrets.ADDRESS_POOL_NAME }}
-    needs: check-required-files
-    if: needs.check-required-files.outputs.all-files-present == 'true'
-    uses: ./.github/workflows/build.yml
+      AUTH_KEY_SALT: ${{ secrets.AUTH_KEY_SALT }}
+      SECURE_AUTH_KEY_SALT: ${{ secrets.SECURE_AUTH_KEY_SALT }}
+      LOGGED_IN_KEY_SALT: ${{ secrets.LOGGED_IN_KEY_SALT }}
+      NONCE_KEY_SALT: ${{ secrets.NONCE_KEY_SALT }}
+      AUTH_SALT: ${{ secrets.AUTH_SALT }}
+      SECURE_AUTH_SALT: ${{ secrets.SECURE_AUTH_SALT }}
+      LOGGED_IN_SALT: ${{ secrets.LOGGED_IN_SALT }}
+      NONCE_SALT: ${{ secrets.NONCE_SALT }}
