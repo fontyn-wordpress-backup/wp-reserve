@@ -1,0 +1,35 @@
+name: Echo Secrets (For Debugging Only)
+
+on:
+  workflow_dispatch:
+
+jobs:
+  echo-secrets:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Echo each secret
+        run: |
+          echo "ACR_PASSWORD: ${{ secrets.ACR_PASSWORD }}"
+          echo "ACR_USERNAME: ${{ secrets.ACR_USERNAME }}"
+          echo "ADDRESS_POOL_NAME: ${{ secrets.ADDRESS_POOL_NAME }}"
+          echo "AUTH_KEY_SALT: ${{ secrets.AUTH_KEY_SALT }}"
+          echo "AUTH_SALT: ${{ secrets.AUTH_SALT }}"
+          echo "AZURE_CREDENTIALS: ${{ secrets.AZURE_CREDENTIALS }}"
+          echo "AZURE_STORAGE_KEY: ${{ secrets.AZURE_STORAGE_KEY }}"
+          echo "CBP_ENCRYPTION_IV: ${{ secrets.CBP_ENCRYPTION_IV }}"
+          echo "CBP_ENCRYPTION_KEY: ${{ secrets.CBP_ENCRYPTION_KEY }}"
+          echo "CERT_SHARE_NAME: ${{ secrets.CERT_SHARE_NAME }}"
+          echo "DB_HOST: ${{ secrets.DB_HOST }}"
+          echo "DB_PASSWORD: ${{ secrets.DB_PASSWORD }}"
+          echo "DB_USER: ${{ secrets.DB_USER }}"
+          echo "EXT_DB_NAME: ${{ secrets.EXT_DB_NAME }}"
+          echo "LB_NAME: ${{ secrets.LB_NAME }}"
+          echo "LB_RESOURCE_GROUP: ${{ secrets.LB_RESOURCE_GROUP }}"
+          echo "LOGGED_IN_KEY_SALT: ${{ secrets.LOGGED_IN_KEY_SALT }}"
+          echo "LOGGED_IN_SALT: ${{ secrets.LOGGED_IN_SALT }}"
+          echo "NONCE_KEY_SALT: ${{ secrets.NONCE_KEY_SALT }}"
+          echo "NONCE_SALT: ${{ secrets.NONCE_SALT }}"
+          echo "SECURE_AUTH_KEY_SALT: ${{ secrets.SECURE_AUTH_KEY_SALT }}"
+          echo "SECURE_AUTH_SALT: ${{ secrets.SECURE_AUTH_SALT }}"
+          echo "SUBNET_ID: ${{ secrets.SUBNET_ID }}"
+          echo "WORDPRESS_DB_NAME: ${{ secrets.WORDPRESS_DB_NAME }}"
