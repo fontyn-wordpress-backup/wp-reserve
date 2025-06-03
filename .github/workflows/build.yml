@@ -23,6 +23,34 @@ on:
         required: true
       NONCE_SALT:
         required: true
+      AZURE_CREDENTIALS:               
+        required: true
+      AZURE_STORAGE_KEY:                
+        required: true
+      SUBNET_ID:                        
+        required: true
+      DB_HOST:
+        required: true
+      WORDPRESS_DB_NAME:
+        required: true
+      DB_USER:
+        required: true
+      DB_PASSWORD:
+        required: true
+      EXT_DB_NAME:
+        required: true
+      CBP_ENCRYPTION_KEY:
+        required: true
+      CBP_ENCRYPTION_IV:
+        required: true
+      CERT_SHARE_NAME:
+        required: true
+      LB_RESOURCE_GROUP:
+        required: true
+      LB_NAME:
+        required: true
+      ADDRESS_POOL_NAME:
+        required: true
 env:
   ACR_LOGIN_SERVER: containerregistrywordpressgwc01.azurecr.io
 
