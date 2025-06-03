@@ -27,6 +27,8 @@ jobs:
             ".github/workflows/build.yml"
             ".github/workflows/deploy.yml"
             ".github/workflows/destroy.yml"
+            ".github/workflows/refresh.yml"
+            ".github/workflows/validate.yml"
           )
 
           for path in "${required_paths[@]}"; do
