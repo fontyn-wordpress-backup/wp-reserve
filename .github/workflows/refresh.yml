@@ -44,22 +44,6 @@ jobs:
         with:
           creds: ${{ secrets.AZURE_CREDENTIALS }}
 
-      - name: Build and Push New Image
-        run: |
-          docker build \
-            --build-arg AUTH_KEY="${{ secrets.AUTH_KEY_SALT }}" \
-            --build-arg SECURE_AUTH_KEY="${{ secrets.SECURE_AUTH_KEY_SALT }}" \
-            --build-arg LOGGED_IN_KEY="${{ secrets.LOGGED_IN_KEY_SALT }}" \
-            --build-arg NONCE_KEY="${{ secrets.NONCE_KEY_SALT }}" \
-            --build-arg AUTH_SALT="${{ secrets.AUTH_SALT }}" \
-            --build-arg SECURE_AUTH_SALT="${{ secrets.SECURE_AUTH_SALT }}" \
-            --build-arg LOGGED_IN_SALT="${{ secrets.LOGGED_IN_SALT }}" \
-            --build-arg NONCE_SALT="${{ secrets.NONCE_SALT }}" \
-            -t ${{ env.ACR_LOGIN_SERVER }}/wordpress:${{ env.IMAGE_TAG }} .
-
-          echo "${{ secrets.ACR_PASSWORD }}" | docker login ${{ env.ACR_LOGIN_SERVER }} -u ${{ secrets.ACR_USERNAME }} --password-stdin
-          docker push ${{ env.ACR_LOGIN_SERVER }}/wordpress:${{ env.IMAGE_TAG }}
-
       - name: Deploy new container
         run: |
           NEW_CONTAINER_NAME="${{ env.CONTAINER_NAME_PREFIX }}${{ github.run_number }}"
