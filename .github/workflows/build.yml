@@ -49,3 +49,33 @@ jobs:
             -t ${{ env.ACR_LOGIN_SERVER }}/wordpress:$IMAGE_TAG .
           echo "${{ secrets.ACR_PASSWORD }}" | docker login ${{ env.ACR_LOGIN_SERVER }} -u ${{ secrets.ACR_USERNAME }} --password-stdin
           docker push ${{ env.ACR_LOGIN_SERVER }}/wordpress:$IMAGE_TAG
+  
+  trigger-refresh:
+    name: Trigger Refresh
+    needs: build-and-push
+    uses: ./.github/workflows/refresh.yml
+    secrets:
+      ACR_USERNAME: ${{ secrets.ACR_USERNAME }}
+      ACR_PASSWORD: ${{ secrets.ACR_PASSWORD }}
+      AUTH_KEY_SALT: ${{ secrets.AUTH_KEY_SALT }}
+      SECURE_AUTH_KEY_SALT: ${{ secrets.SECURE_AUTH_KEY_SALT }}
+      LOGGED_IN_KEY_SALT: ${{ secrets.LOGGED_IN_KEY_SALT }}
+      NONCE_KEY_SALT: ${{ secrets.NONCE_KEY_SALT }}
+      AUTH_SALT: ${{ secrets.AUTH_SALT }}
+      SECURE_AUTH_SALT: ${{ secrets.SECURE_AUTH_SALT }}
+      LOGGED_IN_SALT: ${{ secrets.LOGGED_IN_SALT }}
+      NONCE_SALT: ${{ secrets.NONCE_SALT }}
+      AZURE_CREDENTIALS: ${{ secrets.AZURE_CREDENTIALS }}
+      AZURE_STORAGE_KEY: ${{ secrets.AZURE_STORAGE_KEY }}
+      SUBNET_ID: ${{ secrets.SUBNET_ID }}
+      DB_HOST: ${{ secrets.DB_HOST }}
+      WORDPRESS_DB_NAME: ${{ secrets.WORDPRESS_DB_NAME }}
+      DB_USER: ${{ secrets.DB_USER }}
+      DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
+      EXT_DB_NAME: ${{ secrets.EXT_DB_NAME }}
+      CBP_ENCRYPTION_KEY: ${{ secrets.CBP_ENCRYPTION_KEY }}
+      CBP_ENCRYPTION_IV: ${{ secrets.CBP_ENCRYPTION_IV }}
+      CERT_SHARE_NAME: ${{ secrets.CERT_SHARE_NAME }}
+      LB_RESOURCE_GROUP: ${{ secrets.LB_RESOURCE_GROUP }}
+      LB_NAME: ${{ secrets.LB_NAME }}
+      ADDRESS_POOL_NAME: ${{ secrets.ADDRESS_POOL_NAME }}
