@@ -3,31 +3,15 @@ name: Build and Push WordPress Image
 on:
   workflow_call:
     secrets:
+      AZURE_CREDENTIALS:
+        required: true
+      AZURE_STORAGE_KEY:
+        required: true
       ACR_USERNAME:
         required: true
       ACR_PASSWORD:
         required: true
-      AUTH_KEY_SALT:
-        required: true
-      SECURE_AUTH_KEY_SALT:
-        required: true
-      LOGGED_IN_KEY_SALT:
-        required: true
-      NONCE_KEY_SALT:
-        required: true
-      AUTH_SALT:
-        required: true
-      SECURE_AUTH_SALT:
-        required: true
-      LOGGED_IN_SALT:
-        required: true
-      NONCE_SALT:
-        required: true
-      AZURE_CREDENTIALS:               
-        required: true
-      AZURE_STORAGE_KEY:                
-        required: true
-      SUBNET_ID:                        
+      SUBNET_ID:
         required: true
       DB_HOST:
         required: true
@@ -50,6 +34,22 @@ on:
       LB_NAME:
         required: true
       ADDRESS_POOL_NAME:
+        required: true
+      AUTH_KEY_SALT:
+        required: true
+      SECURE_AUTH_KEY_SALT:
+        required: true
+      LOGGED_IN_KEY_SALT:
+        required: true
+      NONCE_KEY_SALT:
+        required: true
+      AUTH_SALT:
+        required: true
+      SECURE_AUTH_SALT:
+        required: true
+      LOGGED_IN_SALT:
+        required: true
+      NONCE_SALT:
         required: true
 env:
   ACR_LOGIN_SERVER: containerregistrywordpressgwc01.azurecr.io
