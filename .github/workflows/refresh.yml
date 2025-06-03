@@ -137,9 +137,10 @@ jobs:
         run: |
           echo "Cleaning up old containers..."
 
+          NEW_CONTAINER_NAME="${{ steps.deploy.outputs.NEW_CONTAINER_NAME }}"
           OLD_CONTAINERS=$(az container list \
-            --resource-group ${{ env.RESOURCE_GROUP }} \
-            --query "[?starts_with(name, 'container-wordpress-') && name != '${{ steps.deploy.outputs.NEW_CONTAINER_NAME }}'].name" \
+            --resource-group "${{ env.RESOURCE_GROUP }}" \
+            --query "[?starts_with(name, 'container-wordpress-') && name != '${NEW_CONTAINER_NAME}'].name" \
             -o tsv)
 
 
