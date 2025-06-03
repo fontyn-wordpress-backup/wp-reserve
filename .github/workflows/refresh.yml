@@ -150,8 +150,7 @@ jobs:
               --resource-group ${{ secrets.LB_RESOURCE_GROUP }} \
               --lb-name "${{ secrets.LB_NAME }}" \
               --pool-name "${{ secrets.ADDRESS_POOL_NAME }}" \
-              --name "$BACKEND_NAME"
-              || echo "Backend $BACKEND_NAME not found."
+              --name "$BACKEND_NAME" || echo "Backend $BACKEND_NAME not found."
 
             echo "Waiting 10 seconds before deleting container..."
             sleep 10
