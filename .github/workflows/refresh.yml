@@ -77,7 +77,7 @@ jobs:
           TIMESTAMP=$(date +%Y%m%d%H%M%S)
           NEW_CONTAINER_NAME="${{ env.CONTAINER_NAME_PREFIX }}${TIMESTAMP}"
           echo "Deploying new container: $NEW_CONTAINER_NAME"
-
+          echo "NEW_CONTAINER_NAME=$NEW_CONTAINER_NAME" >> $GITHUB_OUTPUT
           az container create \
             --resource-group ${{ env.RESOURCE_GROUP }} \
             --name $NEW_CONTAINER_NAME \
@@ -139,8 +139,9 @@ jobs:
 
           OLD_CONTAINERS=$(az container list \
             --resource-group ${{ env.RESOURCE_GROUP }} \
-            --query "[?starts_with(name, 'container-wordpress-') && name != '$NEW_CONTAINER_NAME'].name" \
+            --query "[?starts_with(name, 'container-wordpress-') && name != '${{ steps.deploy.outputs.NEW_CONTAINER_NAME }}'].name" \
             -o tsv)
+
 
           for CONTAINER in $OLD_CONTAINERS; do
             echo "Removing container: $CONTAINER"
