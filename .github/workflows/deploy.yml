@@ -24,8 +24,8 @@ jobs:
         run: |
           # Set image tag and container name (unique per run)
           IMAGE_TAG="latest"
-          CONTAINER_NAME="${{ env.CONTAINER_NAME_PREFIX }}${{ github.run_number }}"
-          
+          TIMESTAMP=$(date +%Y%m%d%H%M%S)
+          CONTAINER_NAME="${{ env.CONTAINER_NAME_PREFIX }}${TIMESTAMP}"
           echo "Deploying container: $CONTAINER_NAME"
 
           # Azure CLI command to create container
