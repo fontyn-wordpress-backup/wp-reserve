@@ -99,10 +99,25 @@ function cbp_is_accommodation_available($conn, $accommodation_id, $start_date, $
 // Booking form shortcode
 function cbp_render_booking_form() {
     $errors = $_SESSION['cbp_errors'] ?? [];
-    $success = $_SESSION['cbp_success'] ?? '';
+    $success = $_SESSION['cbp_success'] ?? [];
 
     // Clear messages after reading
     unset($_SESSION['cbp_errors'], $_SESSION['cbp_success']);
+
+    // Repopulate fields from POST if available
+    $fields = [
+        'first_name' => '',
+        'last_name' => '',
+        'birthdate' => '',
+        'phone' => '',
+        'email' => '',
+        'timespan' => '',
+        'accommodation_type' => '',
+        'iban' => '',
+    ];
+    foreach ($fields as $key => &$value) {
+        $value = isset($_POST[$key]) ? esc_attr($_POST[$key]) : '';
+    }
 
     ob_start();
     if ($errors) {
@@ -117,19 +132,19 @@ function cbp_render_booking_form() {
     }
     ?>
     <form method="post" action="">
-        <label>First Name: <input type="text" name="first_name" required></label><br>
-        <label>Last Name: <input type="text" name="last_name" required></label><br>
-        <label>Birthdate: <input type="date" name="birthdate" required></label><br>
-        <label>Phone Number: <input type="text" name="phone" required></label><br>
-        <label>Email Address: <input type="email" name="email" required></label><br>
-        <label>Booking Time Span (e.g. 2025-07-01 to 2025-07-05): <input type="text" name="timespan" required></label><br>
+        <label>First Name: <input type="text" name="first_name" value="<?php echo $fields['first_name']; ?>" required></label><br>
+        <label>Last Name: <input type="text" name="last_name" value="<?php echo $fields['last_name']; ?>" required></label><br>
+        <label>Birthdate: <input type="date" name="birthdate" value="<?php echo $fields['birthdate']; ?>" required></label><br>
+        <label>Phone Number: <input type="text" name="phone" value="<?php echo $fields['phone']; ?>" required></label><br>
+        <label>Email Address: <input type="email" name="email" value="<?php echo $fields['email']; ?>" required></label><br>
+        <label>Booking Time Span: <input type="text" name="timespan" value="<?php echo $fields['timespan']; ?>" required></label><br>
         <label>Accommodation Type:
             <select name="accommodation_type" required>
-                <option value="Tent">Tent</option>
-                <option value="Cabin">Cabin</option>
+                <option value="Tent" <?php selected($fields['accommodation_type'], 'Tent'); ?>>Tent</option>
+                <option value="Cabin" <?php selected($fields['accommodation_type'], 'Cabin'); ?>>Cabin</option>
             </select>
         </label><br>
-        <label>IBAN (optional): <input type="text" name="iban"></label><br>
+        <label>IBAN (optional): <input type="text" name="iban" value="<?php echo $fields['iban']; ?>"></label><br>
         <input type="submit" name="cbp_submit" value="Book Now">
     </form>
     <?php
