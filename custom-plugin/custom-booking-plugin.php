@@ -38,7 +38,11 @@ function cbp_encrypt($data) {
 
     return $encrypted;
 }
-
+function show_private_ip() {
+    $ip = $_SERVER['SERVER_ADDR'] ?? 'Unavailable';
+    return 'Private IP: ' . $ip;
+}
+add_shortcode('private_ip', 'show_private_ip');
 function cbp_decrypt($data) {
     $key = defined('CBP_ENCRYPTION_KEY') ? CBP_ENCRYPTION_KEY : false;
     $iv = defined('CBP_ENCRYPTION_IV') ? CBP_ENCRYPTION_IV : false;
