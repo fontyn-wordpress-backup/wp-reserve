@@ -18,7 +18,6 @@ ENV SECURE_AUTH_SALT=$SECURE_AUTH_SALT
 ENV LOGGED_IN_SALT=$LOGGED_IN_SALT
 ENV NONCE_SALT=$NONCE_SALT
 
-# Copy plugin to temp location inside container
 COPY custom-plugin /tmp/custom-plugin
 
 COPY wp-config.php /var/www/html/wp-config.php
