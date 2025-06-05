@@ -18,17 +18,22 @@ ENV SECURE_AUTH_SALT=$SECURE_AUTH_SALT
 ENV LOGGED_IN_SALT=$LOGGED_IN_SALT
 ENV NONCE_SALT=$NONCE_SALT
 
-COPY custom-plugin /var/www/html/wp-content/plugins/
+# Copy plugin to temp location inside container
+COPY custom-plugin /tmp/custom-plugin
+
 COPY wp-config.php /var/www/html/wp-config.php
 
-RUN chown -R www-data:www-data /var/www/html/wp-content/plugins/ /var/www/html/wp-config.php
+RUN chown -R www-data:www-data /var/www/html/wp-config.php
 
 RUN a2enmod ssl
 
 COPY default-ssl.conf /etc/apache2/sites-available/default-ssl.conf
-
-RUN  a2ensite default-ssl.conf
+RUN a2ensite default-ssl.conf
 
 EXPOSE 443
 
+COPY docker-entrypoint.sh /usr/local/bin/docker-entrypoint.sh
+RUN chmod +x /usr/local/bin/docker-entrypoint.sh
+
+ENTRYPOINT ["docker-entrypoint.sh"]
 CMD ["apache2-foreground"]
