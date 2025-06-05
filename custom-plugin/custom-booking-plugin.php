@@ -6,6 +6,8 @@ Version: 1.3
 Author: Stef van Herk
 */
 
+//ENTRYPOINT TEST
+
 // Enable PHP error reporting (disable in production)
 ini_set('display_errors', 1);
 ini_set('display_startup_errors', 1);
